@@ -2,11 +2,42 @@
 <html>
   <head>
     <title>Ryan's Incredible URL Blocker</title>
+    <style>
+      body { font-family: Arial, sans-serif; min-width: 320px; padding: 12px; margin: 0; }
+      h1 { font-size: 1.1em; margin: 0 0 8px; }
+      h2 { font-size: 0.95em; margin: 16px 0 6px; color: #333; }
+      p { font-size: 0.9em; color: #555; margin: 4px 0; }
+      .count { font-size: 1em; margin: 12px 0; }
+      .count strong { font-size: 1.6em; display: block; }
+      ul { list-style: none; padding: 0; margin: 4px 0; }
+      li { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid #eee; }
+      li a { flex: 1; color: #1a73e8; text-decoration: none; font-size: 0.9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      li a:hover { text-decoration: underline; }
+      button { font-size: 0.8em; padding: 2px 8px; border: 1px solid #ccc; background: #fafafa; border-radius: 3px; cursor: pointer; }
+      button:hover { background: #f0f0f0; }
+      button.primary { background: #1a73e8; color: white; border-color: #1a73e8; }
+      button.primary:hover { background: #1666c1; }
+      input { flex: 1; padding: 4px 6px; font-size: 0.9em; border: 1px solid #ccc; border-radius: 3px; }
+    </style>
   </head>
   <body>
-    <h1>Ryan's Incredible Instagram Blocker</h1>
-    <p>
-      Blocking access to Instagram's Explore page since Saturday Feb 24th 2024.
-    </p>
+    <h1>Ryan's Incredible URL Blocker</h1>
+    <p>Blocks all of YouTube and Instagram's Explore/Reels/Shorts.</p>
+    <div class="count">
+      <strong id="count">0</strong>
+      blocked attempts today
+    </div>
+
+    <h2>Music mode</h2>
+    <p>Search and play any song. Every non-music video stays blocked.</p>
+    <button id="music-mode" >Music mode: Off</button>
+
+    <h2>Allowed YouTube</h2>
+    <ul id="youtube-list"></ul>
+
+    <h2>Music playlists</h2>
+    <ul id="music-list"></ul>
+
+    <script src="popup.js"></script>
   </body>
 </html>

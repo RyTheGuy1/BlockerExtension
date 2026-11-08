@@ -8,6 +8,8 @@ const YOUTUBE_PLAYLIST_ALLOWLIST = new Set([
   "PLCrO02k3jDeCt7i5BLgPtYvqG4--hySxj",
 ]);
 
+const ALLOWED_CATEGORIES = new Set(["Education", "Science \\u0026 Technology"]);
+
 const categoryCache = new Map();
 
 async function getCategory(videoId) {
@@ -37,7 +39,7 @@ async function shouldBlock() {
     const v = new URLSearchParams(location.search).get("v");
     if (v) {
       const category = await getCategory(v);
-      if (category === "Education") return false;
+      if (ALLOWED_CATEGORIES.has(category)) return false;
       if (category === "Music" && (await getMusicMode())) return false;
     }
   }

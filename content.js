@@ -144,3 +144,17 @@ new MutationObserver(() => {
     checkUrlAndBlock();
   }
 }).observe(document, { subtree: true, childList: true });
+
+if (location.hostname.endsWith("youtube.com")) {
+  const style = document.createElement("style");
+  style.textContent = `
+    #related,
+    ytd-watch-next-secondary-results-renderer,
+    #comments,
+    ytd-comments,
+    .ytp-endscreen-content,
+    .ytp-ce-element,
+    .ytp-suggestion-set { display: none !important; }
+  `;
+  document.documentElement.appendChild(style);
+}

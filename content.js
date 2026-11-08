@@ -8,17 +8,18 @@ const YOUTUBE_PLAYLIST_ALLOWLIST = new Set([
   "PLCrO02k3jDeCt7i5BLgPtYvqG4--hySxj",
 ]);
 
-const musicCache = new Map();
+const categoryCache = new Map();
 
-async function isMusicVideo(videoId) {
-  if (musicCache.has(videoId)) return musicCache.get(videoId);
-  let isMusic = false;
+async function getCategory(videoId) {
+  if (categoryCache.has(videoId)) return categoryCache.get(videoId);
+  let category = "";
   try {
     const res = await fetch(`/watch?v=${encodeURIComponent(videoId)}`, { credentials: "include" });
-    isMusic = (await res.text()).includes('"category":"Music"');
+    const m = (await res.text()).match(/"category":"([^"]+)"/);
+    category = m ? m[1] : "";
   } catch (e) {}
-  musicCache.set(videoId, isMusic);
-  return isMusic;
+  categoryCache.set(videoId, category);
+  return category;
 }
 
 function getMusicMode() {
@@ -29,15 +30,21 @@ function getMusicMode() {
 
 async function shouldBlock() {
   if (!isBlocked()) return false;
-  if (!location.hostname.endsWith("youtube.com") || !(await getMusicMode())) return true;
+  if (!location.hostname.endsWith("youtube.com")) return true;
 
   const path = location.pathname;
-  if (location.hostname === "music.youtube.com" || path === "/results") return false;
-  if (path === "/playlist" && new URLSearchParams(location.search).get("list") === "LM") return false;
   if (path === "/watch") {
     const v = new URLSearchParams(location.search).get("v");
-    if (v && (await isMusicVideo(v))) return false;
+    if (v) {
+      const category = await getCategory(v);
+      if (category === "Education") return false;
+      if (category === "Music" && (await getMusicMode())) return false;
+    }
   }
+
+  if (!(await getMusicMode())) return true;
+  if (location.hostname === "music.youtube.com" || path === "/results") return false;
+  if (path === "/playlist" && new URLSearchParams(location.search).get("list") === "LM") return false;
   return true;
 }
 

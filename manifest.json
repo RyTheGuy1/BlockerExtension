@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "URL Blocker",
-  "version": "1.4",
+  "version": "1.5",
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
     "tabs",
+    "tabGroups",
     "storage"
   ],
   "background": {

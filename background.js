@@ -14,7 +14,7 @@ const MUSIC_HOSTS = [
   "deezer.com",
   "bandcamp.com",
 ];
-const MUSIC_GROUP_TITLE = "Music";
+const MUSIC_GROUP_TITLE = "🎵";
 
 function isMusicUrl(url) {
   try {
@@ -42,7 +42,7 @@ async function getMusicGroupId() {
 
 async function moveToMusicGroup(tabId) {
   const groupId = await chrome.tabs.group({ tabIds: [tabId] });
-  await chrome.tabGroups.update(groupId, { title: MUSIC_GROUP_TITLE, color: "pink" });
+  await chrome.tabGroups.update(groupId, { title: MUSIC_GROUP_TITLE, color: "blue" });
 }
 
 chrome.tabs.onCreated.addListener(async (tab) => {

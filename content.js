@@ -23,8 +23,39 @@ function getMusicMode() {
   );
 }
 
+const OVERRIDE_MS = 15 * 60 * 1000;
+const OVERRIDE_DELAY_S = 5;
+
+function overrideKey() {
+  return location.origin + location.pathname + location.search;
+}
+
+function hasOverride() {
+  return new Promise((resolve) =>
+    chrome.storage.local.get(["overrides"], (r) => {
+      const exp = (r.overrides || {})[overrideKey()];
+      resolve(!!exp && exp > Date.now());
+    })
+  );
+}
+
+function setOverride() {
+  return new Promise((resolve) =>
+    chrome.storage.local.get(["overrides"], (r) => {
+      const now = Date.now();
+      const overrides = {};
+      for (const [k, v] of Object.entries(r.overrides || {})) {
+        if (v > now) overrides[k] = v;
+      }
+      overrides[overrideKey()] = now + OVERRIDE_MS;
+      chrome.storage.local.set({ overrides }, resolve);
+    })
+  );
+}
+
 async function shouldBlock() {
   if (!isBlocked()) return false;
+  if (await hasOverride()) return false;
   if (!location.hostname.endsWith("youtube.com")) return true;
 
   const path = location.pathname;
@@ -99,12 +130,36 @@ function renderBlockPage(count) {
         }
         .count { margin-top: 1.5em; color: #aaa; font-size: 0.9em; }
         .count strong { color: #fff; }
+        #override { margin-top: 2em; padding: 6px 14px; font-size: 0.85em; color: #888;
+            background: transparent; border: 1px solid #444; border-radius: 4px; cursor: pointer; }
+        #override:disabled { cursor: default; opacity: 0.5; }
+        #override:not(:disabled):hover { color: #fff; border-color: #888; }
     </style>
     <div>
         <h2>This page is blocked by Ryan's Incredible Doom Scroll Blocker</h2>
         <p>Think about how they did you wrong and focus</p>
         <p class="count">You've tried to visit a blocked site <strong>${count}</strong> time${count === 1 ? "" : "s"} today.</p>
+        <button id="override" disabled></button>
     </div>`;
+
+  const btn = document.getElementById("override");
+  const label = "Wrongly blocked? Allow this page for 15 min";
+  let left = OVERRIDE_DELAY_S;
+  btn.textContent = `${label} (${left})`;
+  const timer = setInterval(() => {
+    left--;
+    if (left > 0) {
+      btn.textContent = `${label} (${left})`;
+    } else {
+      clearInterval(timer);
+      btn.textContent = label;
+      btn.disabled = false;
+    }
+  }, 1000);
+  btn.addEventListener("click", async () => {
+    await setOverride();
+    location.reload();
+  });
 }
 
 let blockedThisUrl = null;

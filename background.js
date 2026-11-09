@@ -1,4 +1,6 @@
 // background.js
+importScripts("config.js");
+
 const MAX_TABS = 5;
 const MUSIC_HOSTS = [
   "music.youtube.com",
@@ -16,8 +18,14 @@ const MUSIC_GROUP_TITLE = "Music";
 
 function isMusicUrl(url) {
   try {
-    const host = new URL(url).hostname;
-    return MUSIC_HOSTS.some((h) => host === h || host.endsWith(`.${h}`));
+    const u = new URL(url);
+    const host = u.hostname;
+    if (MUSIC_HOSTS.some((h) => host === h || host.endsWith(`.${h}`))) return true;
+    return (
+      host.endsWith("youtube.com") &&
+      (u.pathname === "/watch" || u.pathname === "/playlist") &&
+      YOUTUBE_PLAYLIST_ALLOWLIST.has(u.searchParams.get("list"))
+    );
   } catch (e) {
     return false;
   }

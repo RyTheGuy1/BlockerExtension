@@ -1,11 +1,23 @@
 // background.js
 const MAX_TABS = 5;
-const MUSIC_HOST = "music.youtube.com";
+const MUSIC_HOSTS = [
+  "music.youtube.com",
+  "open.spotify.com",
+  "music.apple.com",
+  "soundcloud.com",
+  "music.amazon.com",
+  "tidal.com",
+  "listen.tidal.com",
+  "pandora.com",
+  "deezer.com",
+  "bandcamp.com",
+];
 const MUSIC_GROUP_TITLE = "Music";
 
 function isMusicUrl(url) {
   try {
-    return new URL(url).hostname === MUSIC_HOST;
+    const host = new URL(url).hostname;
+    return MUSIC_HOSTS.some((h) => host === h || host.endsWith(`.${h}`));
   } catch (e) {
     return false;
   }

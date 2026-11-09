@@ -7,7 +7,8 @@
     "declarativeNetRequestWithHostAccess",
     "tabs",
     "tabGroups",
-    "storage"
+    "storage",
+    "sidePanel"
   ],
   "background": {
     "service_worker": "background.js"
@@ -33,8 +34,17 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://*.instagram.com/*", "*://*.youtube.com/*"],
-      "js": ["config.js", "content.js"]
+      "matches": [
+        "*://*.instagram.com/*",
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "config.js",
+        "content.js"
+      ]
     }
-  ]
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
 }

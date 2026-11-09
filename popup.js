@@ -119,3 +119,9 @@ musicBtn.addEventListener("click", () => {
     chrome.storage.local.set({ musicMode: next }, () => renderMusicMode(next));
   });
 });
+
+document.getElementById("open-notes").addEventListener("click", async () => {
+  const win = await chrome.windows.getCurrent();
+  chrome.sidePanel.open({ windowId: win.id });
+  window.close();
+});

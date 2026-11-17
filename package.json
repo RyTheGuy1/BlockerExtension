@@ -1,0 +1,32 @@
+{
+  "name": "messenger",
+  "version": "1.0.0",
+  "description": "- Clone this repo - Go to the chrome://extensions url in Chrome - Enable the developer mode (Top right corner) - Press \"Load Unpacked Extension\" and select your local version of this repo",
+  "main": "background.js",
+  "scripts": {
+    "build": "esbuild src/editor.js --bundle --minify --format=iife --outfile=sidepanel.bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyTheGuy1/BlockerExtension.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RyTheGuy1/BlockerExtension/issues"
+  },
+  "homepage": "https://github.com/RyTheGuy1/BlockerExtension#readme",
+  "dependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-markdown": "^6.5.2",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  },
+  "private": true
+}
